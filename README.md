@@ -1,5 +1,8 @@
-# Junior
-JUNIOR the desktop-assistant. Just run the code with the required modules installed and JUNIOR at your service. Python version used 3.6.6 64-bit. Required modules or packages : pyttsx3 , speech recognition , face recognition , opencv , dlib , pygame , pyaudio , numpy , wikipedia , rest used modules or packages are pre-installed in python3.
+# desktop-assistant
+JUNIOR the desktop-assistant.
+Just run the code with the required modules installed and JUNIOR at your service.
+Python version used 3.6.6 64-bit.
+Required modules or packages : pyttsx3 , speech recognition , face recognition , opencv , dlib , pygame , pyaudio , numpy , wikipedia , rest used modules or packages are pre-installed in python3.
 
 Commands currently accepting:-
 
