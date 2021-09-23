@@ -1,0 +1,230 @@
+
+// int helper(vector<int>&res,vector<vector<int>>&dp,int &k,int ind,int &maxi,int sum)
+// {
+//     if(ind==res.size())
+//     {
+//         if(sum<=k)
+//         maxi=max(maxi,sum);
+//         return maxi;;
+//     }
+//     if(sum>k)
+//     return 0;
+//     if(dp[ind][sum]!=-1)
+//     return dp[ind][sum];
+    
+//     if(sum+res[ind]<=k)
+//     dp[ind][sum]=max(helper(res,dp,k,ind+1,maxi,sum),helper(res,dp,k,ind+2,maxi,sum+res[ind]));
+//     else
+//     dp[ind][sum]=helper(res,dp,k,ind+1,maxi,sum);
+    
+//     return dp[ind][sum];
+// }
+int FY22CampusMaximumBricks(vector<int> res, int k)
+{
+    int l=res.size();
+    int sum=0;
+    // for(auto a:res)
+    // sum+=a;
+    vector<vector<int>>dp(l+1,vector<int>(k+1,-1));
+    
+   // int maxi=0;
+   // return helper(res,dp,k,0,maxi,0);
+    for(int i=1;i<=k;i++)
+    {
+        if(res[0]<=i)
+        dp[1][i]=res[0];
+    }
+    for(int i=2;i<=l;i++)
+    {
+        for(int j=1;j<=k;j++)
+        {
+            if(res[i-1]<=j)
+            {
+                dp[i][j]=dp[i-2][j-res[i-1]]+res[i-1];
+            }
+            else
+            {
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+    }
+    int maxi=0;
+    // for(int i=1;i<=l;i++)
+    // {
+    //     for(int j=1;j<=k;j++)
+    //     {
+    //         cout<<dp[i][j]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
+    return maxi;
+}
+
+
+
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string ltrim(const string &);
+string rtrim(const string &);
+
+/*
+ * Complete the 'getTheGroups' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts following parameters:
+ *  1. INTEGER n
+ *  2. STRING_ARRAY queryType
+ *  3. INTEGER_ARRAY students1
+ *  4. INTEGER_ARRAY students2
+ */
+void dfs(vector<int>adj[],int s1,int s2,vector<int>&vis,int &c,bool &flag)
+{
+    // if(vis[s1]!=0)
+    // return;
+    c++;
+    vis[s1]=1;
+    if(s1==s2)
+    flag=true;
+    for(auto a:adj[s1])
+    {
+        if(vis[a]!=0)
+        {
+            dfs(adj,a,s2,vis,c,flag);
+        }
+    
+    }
+    vis[s1]=0;
+}
+vector<int> getTheGroups(int n, vector<string> q, vector<int> s1, vector<int> s2) 
+{
+    vector<int>adj[n+1];
+    vector<int>res;
+    int l=q.size(),s=0;
+    while(s<l)
+    {
+        if(q[s]=="Total")
+        {
+            int c=0;
+            vector<int>vis(n+1,0);
+            bool flag=false;
+            dfs(adj,s1[s],s2[s],vis,c,flag);
+            //cout<<c<<endl;
+            if(flag!=true)
+            {//cout<<1<<endl;
+            dfs(adj,s2[s],s1[s],vis,c,flag);
+            }
+            //cout<<c<<endl;
+            res.push_back(c);
+        }
+        else
+        {
+
+            adj[s1[s]].push_back(s2[s]);
+            adj[s2[s]].push_back(s1[s]);
+        
+        }
+        s++;
+    }
+    return res;
+        
+        
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string n_temp;
+    getline(cin, n_temp);
+
+    int n = stoi(ltrim(rtrim(n_temp)));
+
+    string queryType_count_temp;
+    getline(cin, queryType_count_temp);
+
+    int queryType_count = stoi(ltrim(rtrim(queryType_count_temp)));
+
+    vector<string> queryType(queryType_count);
+
+    for (int i = 0; i < queryType_count; i++) {
+        string queryType_item;
+        getline(cin, queryType_item);
+
+        queryType[i] = queryType_item;
+    }
+
+    string students1_count_temp;
+    getline(cin, students1_count_temp);
+
+    int students1_count = stoi(ltrim(rtrim(students1_count_temp)));
+
+    vector<int> students1(students1_count);
+
+    for (int i = 0; i < students1_count; i++) {
+        string students1_item_temp;
+        getline(cin, students1_item_temp);
+
+        int students1_item = stoi(ltrim(rtrim(students1_item_temp)));
+
+        students1[i] = students1_item;
+    }
+
+    string students2_count_temp;
+    getline(cin, students2_count_temp);
+
+    int students2_count = stoi(ltrim(rtrim(students2_count_temp)));
+
+    vector<int> students2(students2_count);
+
+    for (int i = 0; i < students2_count; i++) {
+        string students2_item_temp;
+        getline(cin, students2_item_temp);
+
+        int students2_item = stoi(ltrim(rtrim(students2_item_temp)));
+
+        students2[i] = students2_item;
+    }
+
+    vector<int> result = getTheGroups(n, queryType, students1, students2);
+
+    for (int i = 0; i < result.size(); i++) {
+        fout << result[i];
+
+        if (i != result.size() - 1) {
+            fout << "\n";
+        }
+    }
+
+    fout << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
